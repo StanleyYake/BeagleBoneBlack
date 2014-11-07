@@ -119,7 +119,7 @@ EVM开发板的NAND按照如下方式配置，这里提及的地址后续NAND指
 To write len bytes of data from a memory buffer located at addr to the NAND block offset:
 
     U-Boot# nand write <addr> <offset> <len>
-    注意：Offset & len应该是 0x800 (2048) bytes的倍数. On writing 3000 (0xbb8) bytes, len field can be aligned to 0x1000 ie 4096 bytes. Offset 字段应该是page start address（2K）倍数, multiple of 2048 bytes.
+    注意：Offset & len应该对齐到 0x800 (2048) bytes. On writing 3000 (0xbb8) bytes, len field can be aligned to 0x1000 ie 4096 bytes. Offset 字段应该对齐到page start address, multiple of 2048 bytes.
 如果在写操作的时候遇到了bad block，会被跳过直到遇到下一个'good' block。举例来说，要将地址在0x80000000 共 0x40000 bytes 写到NAND starting at block 32 (offset 0x400000):
 
     U-Boot# nand write 0x80000000 0x400000 0x40000
@@ -143,6 +143,15 @@ To read len bytes of data from NAND block at a particular offset to the memory b
     U-Boot# nand bad
 注意：用户标记的bad block **重启**后才能看到。
 ##### **Erasing NAND**
+擦除特定地址范围的NAND blocks 或指定number的block 
+
+    U-Boot# nand erase <start offset addr> <len>
+**注意**start offset addr & len fields 应该对齐到 0x20000 (64*2048) bytes, 也即对应 block size 128KB.
+这个命令会跳过bad blocks（both factory and user marked）。例如，擦除blocks 32 through 34
+
+    U-Boot# nand erase 0x00400000 0x40000
+##### **NAND ECC algorithm selection**
+
 
 
 

@@ -16,3 +16,15 @@ AM335X的内部RAM为128KB ，其中结尾的18KB被ROM code使用。此外，�
 注意：当使用内存设备(NAND)加载的时候，a header 必须绑定到SPL的binary上，以表明加载地址和image的容量大小。SPI 启动在烧写image的时候，需要额外的字节转换。
 当使用外围设备（UART）启动的时候，因为加载地址是固定的，就不需要header了。
 ```
+#### Updated Toolchain
+Sitara Linux SDK 6.0的toolchain的地址被改变了，此外对于非Arm 9 的设备一个新的基于Linaro的toolchain就派上用场了。toolchain地址变更的详细信息参看[here](http://processors.wiki.ti.com/index.php/Sitara_Linux_SDK_GCC_Toolchain#Updated.C2.A0Linux-Devkit_Structure),变更Linaro的详细信息在这里可以找到[here](http://processors.wiki.ti.com/index.php/Sitara_Linux_SDK_GCC_Toolchain#Switch_to_Linaro)
+AM18x的用户切换到Linaro不会受到影响。因此，任何引用Linaro toolchain的前缀"**arm-linux-gnueabihf-**" 都应该替换为"**arm-arago-linux-gnueabi-**"
+#### Building U-Boot
+###**Prerequisite**
+针对Arm设备的GNU toolchain比较推荐的是来自Arago的。Arago toolchain在SDK[here](http://software-dl.ti.com/dsps/dsps_public_sw/am_bu/sdk/AM335xSDK/latest/index_FDS.html)的linux-devkit 目录下可以找到.
+```
+以下步骤假定release package在名为$AM335x-PSP-DIR的路径下解压
+```
+首先，切换到U-Boot的根目录。
+    $ cd ./AM335x-LINUX-PSP-MM.mm.pp.bb/src/u-boot/u-boot-MM.mm.pp.bb
+

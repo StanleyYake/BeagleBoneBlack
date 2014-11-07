@@ -26,5 +26,6 @@ AM18x的用户切换到Linaro不会受到影响。因此，任何引用Linaro to
 以下步骤假定release package在名为$AM335x-PSP-DIR的路径下解压
 ```
 首先，切换到U-Boot的根目录。
+
     $ cd ./AM335x-LINUX-PSP-MM.mm.pp.bb/src/u-boot/u-boot-MM.mm.pp.bb
 

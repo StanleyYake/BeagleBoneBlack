@@ -67,9 +67,8 @@ $ make O=am335x CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm am335x_evm
 #### Boot Modes
 -
 NAND
-```
-注意以下操作都是针对AM335X EVM开发板，关于EVM Switch Settings 的更多信息，你可以参考 [here](http://processors.wiki.ti.com/index.php/AM335x_U-Boot_User%27s_Guide#Boot_Switch_Settings)
-```
+
+`注意以下操作都是针对AM335X EVM开发板，关于EVM Switch Settings 的更多信息,你可以参考 [here](http://processors.wiki.ti.com/index.php/AM335x_U-Boot_User%27s_Guide#Boot_Switch_Settings)`
 以下简要描述U-Boot中对于NAND的支持，此外，还会介绍针对NAND如何保存kernel image，RAMDISK或者是UBIFS filesystem 确保能够无需网络上电就可让内核启动并工作。
 ##### OverView
 Micron NAND parts (page size 2KB, block size 128KB) are supported on AM335XEVM platforms
@@ -142,7 +141,7 @@ To read len bytes of data from NAND block at a particular offset to the memory b
 查看bad block的列表
 
     U-Boot# nand bad
-注意：用户标记的bad block**重启**后才能看到。
+注意：用户标记的bad block **重启**后才能看到。
 ##### **Erasing NAND**
 
 

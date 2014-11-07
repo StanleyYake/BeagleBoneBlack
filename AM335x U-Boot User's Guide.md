@@ -146,7 +146,7 @@ To read len bytes of data from NAND block at a particular offset to the memory b
 擦除特定地址范围的NAND blocks 或指定number的block 
 
     U-Boot# nand erase <start offset addr> <len>
-**注意**start offset addr & len fields 应该对齐到 0x20000 (64*2048) bytes, 也即对应 block size 128KB.
+**注意** start offset addr & len fields 应该对齐到 0x20000 (64*2048) bytes, 也即对应 block size 128KB.
 这个命令会跳过bad blocks（both factory and user marked）。例如，擦除blocks 32 through 34
 
     U-Boot# nand erase 0x00400000 0x40000

@@ -20,7 +20,7 @@ AM335X的内部RAM为128KB ，其中结尾的18KB被ROM code使用。此外，�
 Sitara Linux SDK 6.0的toolchain的地址被改变了，此外对于非Arm 9 的设备一个新的基于Linaro的toolchain就派上用场了。toolchain地址变更的详细信息参看[here](http://processors.wiki.ti.com/index.php/Sitara_Linux_SDK_GCC_Toolchain#Updated.C2.A0Linux-Devkit_Structure),变更Linaro的详细信息在这里可以找到[here](http://processors.wiki.ti.com/index.php/Sitara_Linux_SDK_GCC_Toolchain#Switch_to_Linaro)
 AM18x的用户切换到Linaro不会受到影响。因此，任何引用Linaro toolchain的前缀"**arm-linux-gnueabihf-**" 都应该替换为"**arm-arago-linux-gnueabi-**"
 #### Building U-Boot
-###**Prerequisite**
+#####**Prerequisite**
 针对Arm设备的GNU toolchain比较推荐的是来自Arago的。Arago toolchain在SDK[here](http://software-dl.ti.com/dsps/dsps_public_sw/am_bu/sdk/AM335xSDK/latest/index_FDS.html)的linux-devkit 目录下可以找到.
 ```
 以下步骤假定release package在名为$AM335x-PSP-DIR的路径下解压
@@ -28,4 +28,10 @@ AM18x的用户切换到Linaro不会受到影响。因此，任何引用Linaro to
 首先，切换到U-Boot的根目录。
 
     $ cd ./AM335x-LINUX-PSP-MM.mm.pp.bb/src/u-boot/u-boot-MM.mm.pp.bb
+强烈推荐使用"O=" 参数编译到单独的目录中。
+#####**Commands**
+```sh
+$ [ -d ./am335x ] && rm -rf ./am335x
+$ make O=am335x CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm am335x_evm
 
+```

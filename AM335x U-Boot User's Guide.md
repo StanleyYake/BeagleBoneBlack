@@ -125,3 +125,26 @@ To write len bytes of data from a memory buffer located at addr to the NAND bloc
 
     U-Boot# nand write 0x80000000 0x400000 0x40000
 ##### **Reading from NAND**
+To read len bytes of data from NAND block at a particular offset to the memory buffer in DDR located at addr:
+
+    U-Boot# nand read <addr> <offset> <len>
+如果在读操作时候遇到了bad block，他会跳过直到遇上下一个'good' block。例如，要从NAND读取0x40000 bytes-从block 32 (offset 0x400000)开始到内存缓冲区的0x80000000: 
+
+    U-Boot# nand read 0x80000000 0x400000 0x40000
+##### **Marking a bad block**
+有些NAND Block使用一段时间后会损坏，因此明智做法是将它们标记出来，以免造成写入的image损坏。
+
+    U-Boot# nand markbad <offset>
+例如，标记 block 32 (assuming erase block size of 128Kbytes)为bad block。offset = blocknum * 128 * 1024
+
+    U-Boot# nand markbad 0x400000
+##### **Viewing bad blocks**
+查看bad block的列表
+
+    U-Boot# nand bad
+注意：用户标记的bad block**重启**后才能看到。
+##### **Erasing NAND**
+
+
+
+

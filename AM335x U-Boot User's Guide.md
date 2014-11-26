@@ -197,3 +197,11 @@ ECC schemes usage table
 | Linux| BCH8|	 BCH8| BCH8|
 | File System| NA| BCH8| NA|
 | Environment variables| NA| Hamming| NA|
+##### **Flashing Kernel**
+用TFTP服务将 kernel uImage 发送到DDR
+`U-Boot# tftp 0x82000000 <kernel_image>`
+然后烧写kernel Imag到NAND，注意要偏移地址（参考上文中的NAND Layout）
+```
+U-Boot# nand erase 0x00280000 0x00500000
+U-Boot# nand write 0x82000000 0x00280000 0x500000
+```

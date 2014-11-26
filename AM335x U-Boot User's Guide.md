@@ -190,9 +190,9 @@ Currently we support only Software, Hamming Code and BCH8. We do not support BCH
 ```
 ECC schemes usage table
 |Component|	 Default ECC scheme used by the component|	 ECC scheme to be used to flash the component|	 ECC schemes supported by the component|
-|:---------------------------|:-------------------|:------------------------|:---------------------|
-|SPL	| BCH8	 |BCH8	| BCH8|
-|U-boot	 |Hamming|	 BCH8|	 Hamming/BCH8|
-|Linux|	 BCH8|	 BCH8|	 BCH8|
-|File System|	 NA|	 BCH8|	 NA|
-|Environment variables|	 NA|	 Hamming|	 NA|
+| :---------------------------| :-------------------| :------------------------|:---------------------|
+| SPL	| BCH8	 |BCH8	| BCH8|
+| U-boot	 |Hamming|	 BCH8|	 Hamming/BCH8|
+| Linux|	 BCH8|	 BCH8|	 BCH8|
+| File System|	 NA|	 BCH8|	 NA|
+| Environment variables|	 NA|	 Hamming|	 NA|

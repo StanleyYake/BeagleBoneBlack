@@ -1,5 +1,5 @@
-###AM335x U-Boot User's Guide
-[Ti原文地址](http://processors.wiki.ti.com/index.php/AM335x_U-Boot_User%27s_Guide)
+###AM335x U-Boot User's Guide(翻译)
+[TI原文地址](http://processors.wiki.ti.com/index.php/AM335x_U-Boot_User%27s_Guide)
 ####U-Boot
 -
 对于AM335x，他的ROM code就好比bootloader的第一阶段。第二和第三阶段都是基于U-Boot实现的。在本篇文档的下文中，第二阶段的二进制文件指的是SPL，第三阶段的二进制文件仅代表U-Boot。SPL是一个非交互性的loader，是一个特定版本的U-Boot。当编译U-Boot的时候，它也同时被build。
@@ -189,4 +189,10 @@ sw-Set software ECC for NAND hw <hw_type> - Set hardware ECC for NAND <hw_type>
 Currently we support only Software, Hamming Code and BCH8. We do not support BCH4 and BCH16。
 ```
 ECC schemes usage table
-
+Component|	 Default ECC scheme used by the component|	 ECC scheme to be used to flash the component|	 ECC schemes supported by the component|
+|:---------------------------|:-------------------|:------------------------|:---------------------|
+|SPL	| BCH8	 |BCH8	| BCH8|
+|U-boot	 |Hamming|	 BCH8|	 Hamming/BCH8|
+|Linux|	 BCH8|	 BCH8|	 BCH8|
+|File System|	 NA|	 BCH8|	 NA|
+|Environment variables|	 NA|	 Hamming|	 NA|

@@ -169,12 +169,10 @@ B = 14 bytes per 512 byte sector in BCH8
 B = 26 bytes per 512 byte sector in BCH16
 所以对于2k page-size 并拥有64-byte OOB size的NAND flash来，我们会使用BCH8，这会消耗掉64 bytes中的2 + (14*4) = 58 bytes。EVM开发板中的NAND Flash没有足够的空间来支持BCH16。
 ECC Schemes and their context of usage
-| ECC type                   | Usage           												  |
-| :--------------------------|  |:-------------------------------------------------------------------------------------------------------------------------------------:| 
-| S/W ECC	             | Not used 												  | 
-| H/W ECC - Hamming Code     | Should use this scheme only for flashing the U-Boot ENV variables.      			       		  |
-| H/W ECC – BCH8 	     | Should use this scheme while flashing any image/binary other than the U-Boot ENV variables.        |
-	 
+
+| ECC type                   | Usage    |
+| :--------------------------|:--------:| 
+| S/W ECC	             | Not used |										
  
 	 
 	 

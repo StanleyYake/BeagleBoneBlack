@@ -181,9 +181,8 @@ ECC Schemes and their context of usage
 `U-Boot# nandecc [sw | hw <hw_type>]`
 
 用法：
--
+```
 sw-Set software ECC for NAND hw <hw_type> - Set hardware ECC for NAND <hw_type> - 0 for Hamming code 1 for bch4 2 for bch8 3 for bch16 Currently we support only Software, Hamming Code and BCH8. We do not support BCH4 and BCH16。
--
-
+```
 ECC schemes usage table
 

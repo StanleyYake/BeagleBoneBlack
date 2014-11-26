@@ -153,7 +153,6 @@ To read len bytes of data from NAND block at a particular offset to the memory b
 ##### **NAND ECC algorithm selection**
 NAND flash memory 尽管便宜，但是会有其他的问题，比如位翻转（bit-flipping）而导致的数据损坏。然而，通过一些错误纠正技术（ error correction coding (ECC)）使得解决这个问题成为了可能。
 <br>在AM335xPSP_04.06.00.09-rc2 release版本之前，对于保存在NAND Flash中的数据，UBoot支持以下的NAND ECC schemes
--
 1. S/W ECC (Hamming code)
 2. H/W ECC (Hamming code, BCH8)
 从04.06.00.09-rc2 release开始，只支持BCH8，并且这是默认选项。无需用户去主动选择nandecc命令所需要的算法和  所需文件的位置。

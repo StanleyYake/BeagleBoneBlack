@@ -163,7 +163,8 @@ NAND flash memory 尽管便宜，但是会有其他的问题，比如位翻转�
 The first 2 bytes are used for Bad block marker – 0xFFFF => Good block
 接下来的‘N’ 字节 用作 BCH 信息
 
-N = B * <Number of 512-byte sectors in a page>
+<br>N = B * <Number of 512-byte sectors in a page>
+<br>
 B = 8 bytes per 512 byte sector in BCH4
 B = 14 bytes per 512 byte sector in BCH8
 B = 26 bytes per 512 byte sector in BCH16

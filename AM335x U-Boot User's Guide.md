@@ -171,7 +171,7 @@ B = 26 bytes per 512 byte sector in BCH16
 ECC Schemes and their context of usage
 
 | ECC type                   | Usage								 |
-|:---------------------------|:-----------------------------------------------------------------:| 
+|:---------------------------|:-----------------------------------------------------------------| 
 | S/W ECC	                 | Not use	                                                         |		
 | H/W ECC - Hamming Code     | Should use this scheme only for flashing the U-Boot ENV variables.|
 | H/W ECC – BCH8             | Should use this scheme while flashing any image/binary other than the U-Boot ENV variables.|

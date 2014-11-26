@@ -152,12 +152,30 @@ To read len bytes of data from NAND block at a particular offset to the memory b
     U-Boot# nand erase 0x00400000 0x40000
 ##### **NAND ECC algorithm selection**
 NAND flash memory 尽管便宜，但是会有其他的问题，比如位翻转（bit-flipping）而导致的数据损坏。然而，通过一些错误纠正技术（ error correction coding (ECC)）使得解决这个问题成为了可能。
-<br>在AM335xPSP_04.06.00.09-rc2 release版本之前，对于保存在NAND Flash中的数据，UBoot支持以下的NAND ECC schemes
+<br>在AM335xPSP_04.06.00.09-rc2 release版本之前，对于保存在NAND Flash中的数据，UBoot支持以下的NAND ECC schemes:
 
 1. S/W ECC (Hamming code)
 2. H/W ECC (Hamming code, BCH8)
 
 从04.06.00.09-rc2 release开始，只支持BCH8，并且这是默认选项。无需用户去主动选择nandecc命令所需要的算法和  所需文件的位置。
 ##### **BCH Flash OOB Layout**
+对于任何一种ECC策略，我们都需要在写NAND 操作时附加额外的数据来检测和纠正（如果有可能）。在BC策略中，有些字节需要用来存储ECC相关的信息。NAND Memory中额外ECC信息存储在称为Out Of Band 或 OOB的区域。
+The first 2 bytes are used for Bad block marker – 0xFFFF => Good block
+接下来的‘N’ 字节 用作 BCH 信息
+N = B * <Number of 512-byte sectors in a page>
 
+B = 8 bytes per 512 byte sector in BCH4
+B = 14 bytes per 512 byte sector in BCH8
+B = 26 bytes per 512 byte sector in BCH16
+所以对于2k page-size 并拥有64-byte OOB size的NAND flash来，我们会使用BCH8，这会消耗掉64 bytes中的2 + (14*4) = 58 bytes。EVM开发板中的NAND Flash没有足够的空间来支持BCH16。
+ECC Schemes and their context of usage
+| ECC type                   | Usage           |
+| :--------------------------|:---------------:| 
+| S/W ECC	                 | Not used | 
+| H/W ECC - Hamming Code     | Should use this scheme only for flashing the U-Boot ENV variables.      |
+| H/W ECC – BCH8 | Should use this scheme while flashing any image/binary other than the U-Boot ENV variables.        |
+	 
+ 
+	 
+	 
 

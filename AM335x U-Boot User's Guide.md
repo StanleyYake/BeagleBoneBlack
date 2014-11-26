@@ -162,8 +162,8 @@ NAND flash memory 尽管便宜，但是会有其他的问题，比如位翻转�
 对于任何一种ECC策略，我们都需要在写NAND 操作时附加额外的数据来检测和纠正（如果有可能）。在BC策略中，有些字节需要用来存储ECC相关的信息。NAND Memory中额外ECC信息存储在称为Out Of Band 或 OOB的区域。
 The first 2 bytes are used for Bad block marker – 0xFFFF => Good block
 接下来的‘N’ 字节 用作 BCH 信息
-N = B * <Number of 512-byte sectors in a page>
 
+N = B * <Number of 512-byte sectors in a page>
 B = 8 bytes per 512 byte sector in BCH4
 B = 14 bytes per 512 byte sector in BCH8
 B = 26 bytes per 512 byte sector in BCH16

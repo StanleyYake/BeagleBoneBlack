@@ -172,7 +172,7 @@ ECC Schemes and their context of usage
 
 | ECC type                   | Usag								 |
 | :--------------------------|:-----------------------------------------------------------------:| 
-| S/W ECC	             | Not use	                                                         |			|H/W ECC - Hamming Code	     | Should use this scheme only for flashing the U-Boot ENV variables.|
+| S/W ECC	             | Not use	                                                         |			| H/W ECC - Hamming Code     | Should use this scheme only for flashing the U-Boot ENV variables.|
  
 	 
 	 

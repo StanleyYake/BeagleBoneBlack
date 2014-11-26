@@ -199,9 +199,13 @@ ECC schemes usage table
 | Environment variables| NA| Hamming| NA|
 ##### **Flashing Kernel**
 用TFTP服务将 kernel uImage 发送到DDR
-<br>`U-Boot# tftp 0x82000000 <kernel_image>`
+<br>`U-Boot# tftp 0x82000000 <kernel_image>`<br>
 然后烧写kernel Imag到NAND，注意要偏移地址（参考上文中的NAND Layout）
 ```
 U-Boot# nand erase 0x00280000 0x00500000
 U-Boot# nand write 0x82000000 0x00280000 0x500000
 ```
+<br>注意*Image_size 应该是 page size of 2048 (0x800) bytes的整数倍。
+##### **UBIFS file system flashing**
+对于 AM335X, 新一代的UBIFS file system 已经用在NAND flash中了。
+1. 创建和烧写UBIFS file system image的描述可以参考[这里](http://processors.wiki.ti.com/index.php/UBIFS_Support#Creating_UBIFS_file_system)

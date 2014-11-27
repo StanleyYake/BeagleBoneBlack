@@ -351,3 +351,9 @@ U-Boot# fatload mmc 0 0x81000000 uEnv.txt
 U-Boot# env import -t 0x81000000 $filesize
 U-Boot# boot
 ```
+####**SPI**
+-
+> note
+> *PSP 04.06.00.08 之前的版本(and AMSDK 05.05.00.00)不支持此特性。
+> *他们的release package不包含SPI boot的程序。按照编译U-Boot的步骤重新编译以获得所需的SPL（MLO）和U-Boot文件。
+> *选择building for am335x_evm_spiboot而不是am335x_evm会使得程序使用SPI flash而不是NAND。

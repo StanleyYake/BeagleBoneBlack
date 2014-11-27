@@ -409,7 +409,7 @@ if substring (option vendor-class-identifier, 0, 10) = "DM814x ROM" {
 用命令设置MAC地址`U-Boot# set ethaddr <random MAC address eg- 08:11:23:32:12:77>`
 
 > 当设置MAC地址时，确保1st byte 的最低有效位不是 1 。
->  y in xy:ab:cd:ef:gh:jk 必须是偶数
+>  y in xy\:ab\:cd:ef:gh:jk 必须是偶数
 
 连接EVM上的DHCP server是不能得到静态ip的
 ```

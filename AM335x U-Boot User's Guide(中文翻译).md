@@ -450,4 +450,5 @@ U-Boot 环境变量bootargs包含了传递到Linux Kernel中的一些参数，�
 ```
 root=ubi0:<VOLUME NAME> ubi.mtd=<PARTITION_ID>,YYYY rw
 ```
-PARTITION_ID 的值依赖于挂载rootfs的MTD设备，YYYY依赖于分区的page size，VOLUME NAME依赖于按照[这里](http://processors.wiki.ti.com/index.php/UBIFS_Support#Creating_UBIFS_file_system)创建UBIFS image时ubinize.cfg文件中的volume name
+PARTITION_ID 的值依赖于挂载rootfs的MTD设备，YYYY依赖于分区的page size，VOLUME NAME依赖于按照[这里](http://processors.wiki.ti.com/index.php/UBIFS_Support#Creating_UBIFS_file_system)创建UBIFS image时ubinize.cfg文件中的volume name.假设你有多个UBI volumes，ubi0 would change to the volume with the root partition。
+Once nand_root is set:`U-Boot# setenv bootcmd run nand_boot`

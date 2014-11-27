@@ -288,3 +288,23 @@ U-Boot# go 0x82000000
 首先确保准备好了以下材料：
 * 一个拥有fdisk, sfdisk, mkfs.ext3 and mkfs.vfat的linux电脑
 * 从Release package拷贝出images MLO, u-boot.img, uImage, nfs.tar.gz and mksd-am335x.sh到这台电脑上，我们假定拷贝到了 /home/am335x。参考 [AM335x PSP User's Guide](http://processors.wiki.ti.com/index.php/AM335x_PSP_User%27s_Guide)中的"Package Contents" 部分找到这些文件的位置.
+* 空的SD卡（至少256MB，最好4GB）
+* 读卡器
+```
+SD卡启动对于第一分区的格式有要求，推荐使用已经提供的脚本mksd-am335x.sh来创建分区和拷贝文件。
+```
+######**Steps**
+* 将SD卡插入读卡器，再插到Linu电脑上
+* 留意系统分配的挂载名称。输入命令"dmesg"查看，通常在最后显示，类似于 "SDC" (/dev/sdc) or "SDD" (/dev/sdd)
+* 转到已经包含有以上必备文件的/home/am335x目录
+* 确保mksd-am335x.sh拥有可执行的权限
+脚本使用的格式和参数
+```
+./mksd-am335x.sh <sd-device-name> <sd-1st-stage-bootloader> <sd-2nd-stage-bootloader> <kernel-uImage> <filesystem>
+```
+* 这里使用`sudo ./mksd-am335x.sh /dev/sdd MLO u-boot.img uImage nfs.tar.gz`
+* 它会询问覆盖掉文件，确认即可
+* 这个脚本会产生两个分区
+  * 1st partition is formatted as FAT32 containing MLO, u-boot.img, uImage files
+  * 2nd partition is formatted as ext3 where the filesystem is extracted in root
+#####**Boot using SD card**

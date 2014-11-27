@@ -345,7 +345,7 @@ uenvcmd=boot
 如果bootcmd启动了，uEnv.txt会自动从SD卡加载。它也可以人为加载和放入environment。
 ######Making use pre-existing uEnv on SD card
 你可以通过以下命令，让SD上的uEnv.txt覆盖掉保存在NAND这种永久内存中的env settings。
-```
+```sh
 U-Boot# mmc rescan
 U-Boot# fatload mmc 0 0x81000000 uEnv.txt
 U-Boot# env import -t 0x81000000 $filesize
@@ -354,8 +354,8 @@ U-Boot# boot
 ####**SPI**
 -
 ```
-> note
-> *PSP 04.06.00.08 之前的版本(and AMSDK 05.05.00.00)不支持此特性。
-> *他们的release package不包含SPI boot的程序。按照编译U-Boot的步骤重新编译以获得所需的SPL（MLO）和U-Boot文件。
-> *选择building for am335x_evm_spiboot而不是am335x_evm会使得程序使用SPI flash而不是NAND。
+NOTE:
+PSP 04.06.00.08 之前的版本(and AMSDK 05.05.00.00)不支持此特性。
+他们的release package不包含SPI boot的程序。按照编译U-Boot的步骤重新编译以获得所需的SPL（MLO）和U-Boot文件。
+选择building for am335x_evm_spiboot而不是am335x_evm会使得程序使用SPI flash而不是NAND。
 ```

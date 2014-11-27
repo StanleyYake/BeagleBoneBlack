@@ -452,3 +452,25 @@ root=ubi0:<VOLUME NAME> ubi.mtd=<PARTITION_ID>,YYYY rw
 ```
 PARTITION_ID 的值依赖于挂载rootfs的MTD设备，YYYY依赖于分区的page size，VOLUME NAME依赖于按照[这里](http://processors.wiki.ti.com/index.php/UBIFS_Support#Creating_UBIFS_file_system)创建UBIFS image时ubinize.cfg文件中的volume name.假设你有多个UBI volumes，ubi0 would change to the volume with the root partition。
 Once nand_root is set:`U-Boot# setenv bootcmd run nand_boot`
+#####**Environment Settings for jffs2 Filesystem**
+这里的bootargs利用了nand_root的变量，根文件系统的格式是jffs2，开启和使用jffs2作为根文件系统你可以参考[这里](http://processors.wiki.ti.com/index.php/AM335x_JFFS2_Support_Guide)
+#####**Environment Settings for NFS Filesystem**
+```
+NOTE:
+当设置MAC地址时，确保1st byte 的最低有效位不是 1 。
+y in xy\:ab\:cd:ef:gh:jk 必须是偶数
+如果你想给TFTP and NFS使用一个单独的server，你需要了解how to use the next-server option in your DHCP server
+```
+修改必须的一些变量
+```
+U-Boot# print ethaddr                          <-- Check if MAC address is assigned and is unique
+U-Boot# setenv ethaddr <unique-MAC-address>    <-- Set only if not present already, format uv:yy:zz:aa:bb:cc
+U-Boot# setenv serverip <NFS and TFTP server-ip>
+U-Boot# setenv rootpath /location/of/nfsroot/export
+U-Boot# setenv bootcmd net_boot
+```
+####**Booting the kernel**
+假设一切顺利，输入以下指令启动内核
+```
+U-Boot# boot
+```

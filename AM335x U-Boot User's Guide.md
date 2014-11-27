@@ -211,7 +211,8 @@ U-Boot# nand write 0x82000000 0x00280000 0x500000
 <br>1. 创建和烧写UBIFS file system image的描述可以参考[这里](http://processors.wiki.ti.com/index.php/UBIFS_Support#Creating_UBIFS_file_system)
 ```
 *注意*
-对于Am335x，file system分区开始于0x780000，所以在U-boot中对于filesystem的flash offset是0x780000。并且from Linux MTD partition, number 7 should used for flashing file file system.
+对于Am335x，file system分区开始于0x780000，所以在U-boot中对于filesystem的flash offset是0x780000。
+并且from Linux MTD partition, number 7 should used for flashing file file system.
 ```
 ####UART
 -
@@ -219,5 +220,29 @@ U-Boot# nand write 0x82000000 0x00280000 0x500000
 #####**Boot Over UART**
 ```
 *注意*
-Release package里并没有包含UART boot的可执行文件，请按照以下步骤[这里Building U-Boot](http://processors.wiki.ti.com/index.php/AM335x_U-Boot_User%27s_Guide#Building_U-Boot)编译U-boot，利用最后生成的spl/u-boot-spl.bin来启动UART boot。
+Release package里并没有包含UART boot的可执行文件，请按照以下步骤[这里Building U-Boot](http://processors.wiki.ti.com/index.php/AM335x_U-Boot_User%27s_Guide#Building_U-Boot)
+编译U-boot，利用最后生成的spl/u-boot-spl.bin来启动UART boot。
+```
+1. 上EVM开发板并将开拨到UART boot。当TeraTerm窗口中出现“CCCC”字符串时，菜单栏中选择Transfer --> XMODEM --> Send (1K mode)
+2. 发送对象选择“u-boot-spl.bin” 
+3. 在image成功download后，ROM code will boot it
+4. 当TeraTerm窗口中出现“CCCC”字符串时，菜单栏中选择Transfer --> YMODEM --> Send (1K mode)
+5. 发送对象选择“u-boot.img”
+6. 在image成功download后，u-boot will boot it
+7. 按回车键跳到uboot命令行界面
+#####**Flashing images to NAND in UART boot mode**
+Boot using UART boot mode，拨码开关的档位参考这里，将SW3 开关档位设成如下: 
+Dip switch #	 1	    2	 3	    4	    5
+Position	     ON	 OFF	 OFF	 OFF	 OFF
+当U-boot命令行界面出现后，第一和第二阶段的image可以烧写到NAND永久保存。
+在UART boot mode下烧写SPL到NAND用以下命令
+```
+U-Boot# loadb 0x82000000
+```
+* 在TeraTerm界面选择“File -> Transfer -> Kermit -> Send”
+* 选择u-boot第一阶段的image “MLO” 并选择“open”
+* 当下载完成后，u-boot命令行输入以下命令：
+```
+U-Boot# nand erase 0x0 0x20000
+U-Boot# nand write 0x82000000 0x0 0x20000
 ```

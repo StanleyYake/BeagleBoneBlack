@@ -357,7 +357,7 @@ U-Boot# boot
 ```
 NOTE:
 PSP 04.06.00.08 之前的版本(and AMSDK 05.05.00.00)不支持此特性。
-他们的release package不包含SPI boot的程序。按照编译U-Boot的步骤重新编译以获得所需的SPL（MLO）和U-Boot文件。
+release package不包含SPI boot的程序。按照编译U-Boot的步骤重新编译以获得所需的 MLO.spi and u-boot.bin文件。
 选择building for am335x_evm_spiboot而不是am335x_evm会使得程序使用SPI flash而不是NAND。
 ```
 在接下来的例子中，我们首先从SD卡启动，将文件写入到SPI Flash。如果用其他方法加载，要修改下面的指令
@@ -372,3 +372,82 @@ U-Boot# sf write ${loadaddr} 0 ${filesize}
 U-Boot# fatload mmc 0 ${loadaddr} u-boot.img
 U-Boot# sf write ${loadaddr} 0x80000 ${filesize}
 ```
+####**CPSW Ethernet**
+-
+```
+NOTE:
+ PSP 04.06.00.08 之前版本(and AMSDK 05.05.00.00)不支持此特性。
+ release package不包含CPSW Ethernet boot的程序。按照编译U-Boot的步骤重新编译以获得所需的spl/u-boot-spl.bin and u-boot.img文件
+```
+#####**Booting Over CPSW Ethernet**
+* 在主机上配置DHCPd and tftpd
+* 在dhcpd的配置中，在vendor-class-identifier选项卡中添加发送入口给the u-boot-spl.bin or u-boot.img。对于ISC dhcpd 的例子如下：
+
+```
+host am335x_evm {
+hardware ethernet de:ad:be:ee:ee:ef;
+if substring (option vendor-class-identifier, 0, 10) = "DM814x ROM" {
+  filename "u-boot-spl.bin";
+} elsif substring (option vendor-class-identifier, 0, 17) = "AM335x U-Boot SPL" {
+  filename "u-boot.img";
+} else {
+  filename "uImage-am335x";
+} 
+} 
+```
+* 拷贝u-boot-spl.bin and u-boot.img to the directory tftpd serves files from
+* 拨码快关拨到CPSW ethernet boot档位，给EVM开发板上电
+* 回车键就可以进入U-Boot命令行界面
+######**Flashing in CPSW Ethernet boot mode**
+创建一个从CPSW Ethernet启动并自动加载和执行脚本U-Boot是没有问题的。它可以用来初始化或重装系统。
+首先在创建U-Boot时，你需要选择**am335x_evm_restore_flash** 而不是 am335x_evm。接着创建启动脚本，在 doc/am335x.net-spl/debrick-nand.txt and doc/am335x.net-spl/debrick-spi.txt中有例子，copy然后根据情况修改。创建好以后，使用以下指令转变为scr文件:
+`./tools/mkimage -A arm -O U-Boot -C none -T script -d <your script> debrick.scr`
+拷贝生成的debrick.scr文件到the location tftpd serves files out of。更多信息请参考doc/am335x.net-spl/README
+#####**U-Boot Network configuration**
+为了从TFTP server下载linux kernel并挂载NFS，U-Boot中的network需要设置一下。
+第一次启动时，U-Boot会尝试从env space中加载MAC地址。如返回空，它会去查找eFuse registers in the Control module space，并在env中设置"ethaddr"变量。这种情况下，用户自定义的MAC地址只在下次重启后生效。
+用命令设置MAC地址`U-Boot# set ethaddr <random MAC address eg- 08:11:23:32:12:77>`
+
+> 当设置MAC地址时，确保1st byte 的最低有效位不是 1 。
+>  y in xy:ab:cd:ef:gh:jk 必须是偶数
+
+连接EVM上的DHCP server是不能得到静态ip的
+```
+U-Boot# setenv serverip <tftp server in your network>
+U-Boot# netmask 255.255.255.0
+U-Boot# dhcp
+U-Boot# saveenv
+```
+你可以通过以下命令设置静态ip
+```
+U-Boot# setenv ipaddr <your static ip>
+U-Boot# saveenv
+```
+####**U-Boot Environment Variables**
+-
+完成network configuration和烧写kernel image、filesystem到flash中时。还必须设置一些启动kernel的特殊参数。可以通过`printenv`指令查看environment中设置好的一些非常有用的参数，当设置bootargs和其他一些变量，你应该用`saveenv`保存。通常，我们利用optargs控制传递额外的参数和并利用ip_method确定内核将如何在userspace spawning init之前处理networking。
+##### **Environment Settings for Ramdisk**
+假设你使用 RAMDISK作为linux的filesystem
+```
+U-Boot# setenv bootargs ${console} ${optargs} root=/dev/ram rw initrd=${loadaddr},32MB ip=${ip_method}
+```
+从NAND启动：
+```
+U-Boot# setenv nand_src_addr 0x00280000
+U-Boot# setenv nand_img_siz 0x170000
+U-Boot# setenv initrd_src_addr 0x00780000
+U-Boot# setenv initrd_img_siz 0x320000
+U-Boot# setenv bootcmd 'nand read ${kloadaddr} ${nand_src_addr} ${nand_img_siz};nand read ${loadaddr} ${initrd_src_addr} ${initrd_img_siz};bootm ${kloadaddr}'
+```
+从SD卡启动：
+```
+U-Boot# setenv bootcmd 'mmc rescan;run mmc_load_uimage;fatload mmc ${mmc_dev} ${loadaddr} initrd.ext3.gz;bootm ${kloadaddr}'
+```
+> 注意，上面提到的image的size要根据实际情况修改，此外还必须与所用flash设备的sector size对齐
+
+#####**Environment Settings for UBIFS Filesystem**
+U-Boot 环境变量bootargs包含了传递到Linux Kernel中的一些参数，这里的bootargs利用了nand_root variable。典型格式如下
+```
+root=ubi0:<VOLUME NAME> ubi.mtd=<PARTITION_ID>,YYYY rw
+```
+PARTITION_ID 的值依赖于挂载rootfs的MTD设备，YYYY依赖于分区的page size，VOLUME NAME依赖于按照[这里](http://processors.wiki.ti.com/index.php/UBIFS_Support#Creating_UBIFS_file_system)创建UBIFS image时ubinize.cfg文件中的volume name

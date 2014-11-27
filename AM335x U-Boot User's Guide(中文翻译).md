@@ -230,11 +230,13 @@ Release package里并没有包含UART boot的可执行文件，请按照以下�
 5. 发送对象选择“u-boot.img”
 6. 在image成功download后，u-boot will boot it
 7. 按回车键跳到uboot命令行界面
+
 #####**Flashing images to NAND in UART boot mode**
 Boot using UART boot mode，拨码开关的档位参考这里，将SW3 开关档位设成如下: 
 Dip switch #	 1	    2	 3	    4	    5
 Position	     ON	 OFF	 OFF	 OFF	 OFF
 当U-boot命令行界面出现后，第一和第二阶段的image可以烧写到NAND永久保存。
+######**Flashing SPL（MLO） to NAND in UART boot mode**
 在UART boot mode下烧写SPL到NAND用以下命令
 ```
 U-Boot# loadb 0x82000000
@@ -246,3 +248,17 @@ U-Boot# loadb 0x82000000
 U-Boot# nand erase 0x0 0x20000
 U-Boot# nand write 0x82000000 0x0 0x20000
 ```
+如果没有错误信息，那么the SPL of NAND boot has been successfully transferred to NAND
+######**Flashing U-Boot to NAND in UART boot mode**
+烧写u-boot第二阶段的image(u-boot.img) 到NAND使用以下命令：
+```
+U-Boot# loadb 0x82000000
+```
+* 在TeraTerm界面选择“File -> Transfer -> Kermit -> Send”
+* 选择u-boot第二阶段的image “u-boot.img” 并选择“open”
+* 当下载完成后，u-boot命令行输入以下命令：
+```
+U-Boot# nand erase 0x80000 0x40000
+U-Boot# nand write 0x82000000 0x80000 0x40000
+```
+如果没有错误信息，那么the U-boot of NAND boot has been successfully transferred to NAND. 

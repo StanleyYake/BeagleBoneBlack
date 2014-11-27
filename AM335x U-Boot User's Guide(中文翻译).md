@@ -262,3 +262,29 @@ U-Boot# nand erase 0x80000 0x40000
 U-Boot# nand write 0x82000000 0x80000 0x40000
 ```
 如果没有错误信息，那么the U-boot of NAND boot has been successfully transferred to NAND. 
+####SD (Secured Digital card)
+-
+本部分主要介绍SD卡中U-boot的操作
+#####**Read and execute uImage from SD card**
+要注意以下操作都是在2nd stage后执行的。列出用FAT32格式化的SD卡上的文件：
+```
+U-Boot# mmc rescan
+U-Boot# fatls mmc 0
+```
+从SD卡启动kernel image
+```
+U-Boot# mmc rescan
+U-Boot# fatload mmc 0 0x82000000 uImage
+U-Boot# bootm 0x82000000
+```
+从SD卡读取并执行u-boot
+```
+U-Boot# mmc rescan
+U-Boot# fatload mmc 0 0x82000000 u-boot.bin
+U-Boot# go 0x82000000
+```
+#####**Setting Up Boot Environment on SD Card**
+本部分描述了在SD卡上创建可单独启动的系统的步骤。
+首先确保准备好了以下材料：
+* 一个拥有fdisk, sfdisk, mkfs.ext3 and mkfs.vfat的linux电脑
+* 从Release package拷贝出images MLO, u-boot.img, uImage, nfs.tar.gz and mksd-am335x.sh到这台电脑上，我们假定拷贝到了 /home/am335x。参考 [AM335x PSP User's Guide](http://processors.wiki.ti.com/index.php/AM335x_PSP_User%27s_Guide)中的"Package Contents" 部分找到这些文件的位置.

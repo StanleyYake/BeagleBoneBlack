@@ -307,6 +307,7 @@ SD卡启动对于第一分区的格式有要求，推荐使用已经提供的脚
 * 这个脚本会产生两个分区
   * 1st partition is formatted as FAT32 containing MLO, u-boot.img, uImage files
   * 2nd partition is formatted as ext3 where the filesystem is extracted in root
+
 #####**Boot using SD card**
 当SD卡按照上面的步骤操作后，在EVM开发板上插入SD卡并确保开关打到了SD boot mode
 Dip switch #	 1	 2	 3	 4	 5
@@ -345,7 +346,7 @@ uenvcmd=boot
 如果bootcmd启动了，uEnv.txt会自动从SD卡加载。它也可以人为加载和放入environment。
 ######Making use pre-existing uEnv on SD card
 你可以通过以下命令，让SD上的uEnv.txt覆盖掉保存在NAND这种永久内存中的env settings。
-```sh
+```bash
 U-Boot# mmc rescan
 U-Boot# fatload mmc 0 0x81000000 uEnv.txt
 U-Boot# env import -t 0x81000000 $filesize
@@ -358,4 +359,16 @@ NOTE:
 PSP 04.06.00.08 之前的版本(and AMSDK 05.05.00.00)不支持此特性。
 他们的release package不包含SPI boot的程序。按照编译U-Boot的步骤重新编译以获得所需的SPL（MLO）和U-Boot文件。
 选择building for am335x_evm_spiboot而不是am335x_evm会使得程序使用SPI flash而不是NAND。
+```
+在接下来的例子中，我们首先从SD卡启动，将文件写入到SPI Flash。如果用其他方法加载，要修改下面的指令
+1. 让EVM开发板接通电源，启动方式的拨码快关打到其他**非SPI boot**档位上。
+2. 写入到SPI memory你需要输入以下指令
+```
+U-Boot# sf probe 0
+U-Boot# sf erase 0 +E0000
+U-Boot# mmc rescan
+U-Boot# fatload mmc 0 ${loadaddr} MLO.byteswap
+U-Boot# sf write ${loadaddr} 0 ${filesize}
+U-Boot# fatload mmc 0 ${loadaddr} u-boot.img
+U-Boot# sf write ${loadaddr} 0x80000 ${filesize}
 ```

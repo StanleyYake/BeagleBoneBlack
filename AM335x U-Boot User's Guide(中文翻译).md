@@ -313,7 +313,7 @@ Dip switch #	 1	 2	 3	 4	 5
 Position	 ON	 ON	 ON	 OFF	 ON
 #####**Flashing images to NAND in SD boot**
 在u-boot第二阶段的命令行窗口，the images for the 1st stage and 2nd stage can be flashed to NAND for persistent storage. 
-######Flashing SPL to NAND in SD boot
+######**Flashing SPL to NAND in SD boot**
 烧写SPL（MLO）到NAND用以下命令：
 ```
 U-Boot# mmc rescan
@@ -324,7 +324,7 @@ U-Boot# nand erase 0x0 0x20000
 U-Boot# nand write 0x82000000 0x0 0x20000
 ```
 如果没有错误信息，那么SPL（MLO）就成功烧写到NAND中了。
-######Flashing U-Boot to NAND in SD boot
+######**Flashing U-Boot to NAND in SD boot**
 烧写U-boot到NAND：
 ```
 U-Boot# mmc rescan

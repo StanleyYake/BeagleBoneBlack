@@ -308,3 +308,46 @@ SD卡启动对于第一分区的格式有要求，推荐使用已经提供的脚
   * 1st partition is formatted as FAT32 containing MLO, u-boot.img, uImage files
   * 2nd partition is formatted as ext3 where the filesystem is extracted in root
 #####**Boot using SD card**
+当SD卡按照上面的步骤操作后，在EVM开发板上插入SD卡并确保开关打到了SD boot mode
+Dip switch #	 1	 2	 3	 4	 5
+Position	 ON	 ON	 ON	 OFF	 ON
+#####**Flashing images to NAND in SD boot**
+在u-boot第二阶段的命令行窗口，the images for the 1st stage and 2nd stage can be flashed to NAND for persistent storage. 
+######Flashing SPL to NAND in SD boot
+烧写SPL（MLO）到NAND用以下命令：
+```
+U-Boot# mmc rescan
+U-Boot# fatload mmc 0 0x82000000 MLO
+```
+```
+U-Boot# nand erase 0x0 0x20000
+U-Boot# nand write 0x82000000 0x0 0x20000
+```
+如果没有错误信息，那么SPL（MLO）就成功烧写到NAND中了。
+######Flashing U-Boot to NAND in SD boot
+烧写U-boot到NAND：
+```
+U-Boot# mmc rescan
+U-Boot# fatload mmc 0 0x82000000 u-boot.img
+U-Boot# nand erase 0x80000 0x40000
+U-Boot# nand write 0x82000000 0x80000 0x40000
+```
+#####**Setting U-Boot environment using uEnv.txt**
+U-Boot环境变量可以通过uEnv.txt修改。如果一个叫做uenvcmd 的命令在文件中被定义，它就会被执行，它可以修改甚至是覆写多种参数如bootargs, TFTP serverip 等等。uEnv.txt可以从SD卡和tftp server加载。
+> 注意
+> uEnv.txt文件必须是unix格式，确保文件末尾有一个空白行。
+
+```
+bootargs=console=ttyO0,115200n8 root=/dev/mmcblk0p2 mem=128M rootwait
+bootcmd=mmc rescan; fatload mmc 0 0x82000000 uImage; bootm 0x82000000
+uenvcmd=boot
+```
+如果bootcmd启动了，uEnv.txt会自动从SD卡加载。它也可以人为加载和放入environment。
+######Making use pre-existing uEnv on SD card
+你可以通过以下命令，让SD上的uEnv.txt覆盖掉保存在NAND这种永久内存中的env settings。
+```
+U-Boot# mmc rescan
+U-Boot# fatload mmc 0 0x81000000 uEnv.txt
+U-Boot# env import -t 0x81000000 $filesize
+U-Boot# boot
+```

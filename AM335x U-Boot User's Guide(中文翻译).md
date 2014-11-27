@@ -395,9 +395,11 @@ if substring (option vendor-class-identifier, 0, 10) = "DM814x ROM" {
 } 
 } 
 ```
+
 * 拷贝u-boot-spl.bin and u-boot.img to the directory tftpd serves files from
 * 拨码快关拨到CPSW ethernet boot档位，给EVM开发板上电
 * 回车键就可以进入U-Boot命令行界面
+
 ######**Flashing in CPSW Ethernet boot mode**
 创建一个从CPSW Ethernet启动并自动加载和执行脚本U-Boot是没有问题的。它可以用来初始化或重装系统。
 首先在创建U-Boot时，你需要选择**am335x_evm_restore_flash** 而不是 am335x_evm。接着创建启动脚本，在 doc/am335x.net-spl/debrick-nand.txt and doc/am335x.net-spl/debrick-spi.txt中有例子，copy然后根据情况修改。创建好以后，使用以下指令转变为scr文件:
@@ -458,7 +460,7 @@ Once nand_root is set:`U-Boot# setenv bootcmd run nand_boot`
 ```
 NOTE:
 当设置MAC地址时，确保1st byte 的最低有效位不是 1 。
-y in xy\:ab\:cd:ef:gh:jk 必须是偶数
+y in xy:ab:cd:ef:gh:jk 必须是偶数
 如果你想给TFTP and NFS使用一个单独的server，你需要了解how to use the next-server option in your DHCP server
 ```
 修改必须的一些变量

@@ -209,3 +209,15 @@ U-Boot# nand write 0x82000000 0x00280000 0x500000
 ##### **UBIFS file system flashing**
 对于 AM335X, 新一代的UBIFS file system 已经用在NAND flash中了。
 <br>1. 创建和烧写UBIFS file system image的描述可以参考[这里](http://processors.wiki.ti.com/index.php/UBIFS_Support#Creating_UBIFS_file_system)
+```
+*注意*
+对于Am335x，file system分区开始于0x780000，所以在U-boot中对于filesystem的flash offset是0x780000。并且from Linux MTD partition, number 7 should used for flashing file file system.
+```
+####UART
+-
+本部分将介绍如何通过TeraTerm来使用UART boot mode。
+#####**Boot Over UART**
+```
+*注意*
+Release package里并没有包含UART boot的可执行文件，请按照以下步骤[这里Building U-Boot](http://processors.wiki.ti.com/index.php/AM335x_U-Boot_User%27s_Guide#Building_U-Boot)编译U-boot，利用最后生成的spl/u-boot-spl.bin来启动UART boot。
+```
